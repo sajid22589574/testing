@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: indivillage-chatbot
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: PINECONE_API_KEY_INDIVILLAGE
+        sync: false
+      - key: PINECONE_OPENAI_INDIVILLAGE
+        sync: false
+      - key: PINECONE_NAMESPACE_INDIVILLAGE
+        sync: false
+      - key: ROUTE_PREFIX
+        value: /indivillage
+      - key: PORT
+        value: 8000

@@ -1,0 +1,76 @@
+/* style.css — Place inside indivillage/static/style.css */
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.login-box, .chat-container {
+    width: 400px;
+    margin: 80px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+}
+
+.login-box h2, .chat-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-box input, .chat-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.chat-box {
+    height: 300px;
+    overflow-y: auto;
+    background-color: #f1f1f1;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+}
+
+.user-message, .bot-response {
+    padding: 6px 8px;
+    margin: 6px 0;
+    border-radius: 6px;
+}
+
+.user-message {
+    background-color: #e1f5fe;
+    text-align: right;
+}
+
+.bot-response {
+    background-color: #e8f5e9;
+    text-align: left;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}

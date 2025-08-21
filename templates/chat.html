@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IndiVillage Chatbot</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/chat-style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <img src="/static/logo_indivillage.png" alt="IndiVillage Logo" class="logo">
+            <h1>IndiVillage Assistant</h1>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                <div class="message-avatar">AI</div>
+                <div class="message-content-wrapper">
+                    <div class="message-content">
+                        Hello! I'm your IndiVillage assistant. I can help you with information about our services, operations, and processes. How can I assist you today?
+                    </div>
+                    <div class="message-timestamp">{{ current_time }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="user-input" placeholder="Message IndiVillage Assistant..." />
+            <button id="send-button">➤</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Function to add a message to the chat
+            function addMessage(sender, content) {
+                const messagesContainer = $('#chat-messages');
+                const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const messageDiv = $('<div>').addClass('message').addClass(sender + '-message');
+                const avatarDiv = $('<div>').addClass('message-avatar').text(sender === 'user' ? 'You' : 'AI');
+                const contentWrapper = $('<div>').addClass('message-content-wrapper');
+                const contentDiv = $('<div>').addClass('message-content').text(content);
+                const timestampDiv = $('<div>').addClass('message-timestamp').text(timestamp);
+                
+                contentWrapper.append(contentDiv).append(timestampDiv);
+                messageDiv.append(avatarDiv).append(contentWrapper);
+                messagesContainer.append(messageDiv);
+                
+                // Scroll to bottom
+                messagesContainer.scrollTop(messagesContainer[0].scrollHeight);
+            }
+            
+            // Function to send message to backend
+            function sendMessage() {
+                const userInput = $('#user-input');
+                const message = userInput.val().trim();
+                
+                if (message) {
+                    // Add user message to chat
+                    addMessage('user', message);
+                    
+                    // Clear input
+                    userInput.val('');
+                    
+                    // Show typing indicator
+                    const typingIndicator = `
+                        <div class="message bot-message typing-indicator" id="typing-indicator">
+                            <div class="message-avatar">AI</div>
+                            <div class="message-content-wrapper">
+                                <div class="message-content">
+                                    <div class="typing-dots">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    $('#chat-messages').append(typingIndicator);
+                    $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                    
+                    // Send to backend
+                    $.ajax({
+                        url: '/indivillage/query',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ question: message }),
+                        success: function(response) {
+                            // Remove typing indicator
+                            $('#typing-indicator').remove();
+                            
+                            // Add bot response
+                            addMessage('bot', response.answer);
+                        },
+                        error: function(xhr, status, error) {
+                            // Remove typing indicator
+                            $('#typing-indicator').remove();
+                            
+                            // Add error message
+                            addMessage('bot', 'Sorry, I encountered an error. Please try again.');
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            }
+            
+            // Event listeners
+            $('#send-button').click(sendMessage);
+            
+            $('#user-input').keypress(function(e) {
+                if (e.which === 13) {  // Enter key
+                    sendMessage();
+                }
+            });
+            
+            // Focus on input field
+            $('#user-input').focus();
+        });
+    </script>
+</body>
+</html>
