@@ -6,6 +6,8 @@ services:
     buildCommand: pip install -r requirements.txt
     startCommand: python app.py
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.15
       - key: OPENAI_API_KEY
         sync: false
       - key: PINECONE_API_KEY_INDIVILLAGE

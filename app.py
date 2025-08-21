@@ -37,7 +37,7 @@ NO_CONTEXT_RESPONSE = os.getenv("NO_CONTEXT_RESPONSE_INDIVILLAGE", "I apologize,
 # Initialize APIs
 openai.api_key = OPENAI_API_KEY
 pc = Pinecone(api_key=PINECONE_API_KEY)
-index = pc.Index(PINECONE_INDEX)
+index = pc.Index(name=PINECONE_INDEX)
 
 # Load system prompt
 def load_system_prompt():
